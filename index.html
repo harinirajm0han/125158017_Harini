@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Average Calculator Frontend</title>
+</head>
+<body>
+    <h1>Average Calculator</h1>
+    <label for="numberid">Enter number ID (p, f, e, r): </label>
+    <input type="text" id="numberid">
+    <button onclick="calculateAverage()">Fetch Number</button>
+    <div id="response"></div>
+
+    <script>
+        function calculateAverage() {
+            const numberid = document.getElementById('numberid').value.trim();
+            if (!['p', 'f', 'e', 'r'].includes(numberid)) {
+                alert("Invalid number ID. Valid IDs: p, f, e, r");
+                return;
+            }
+
+            fetch(`/number/${numberid}`)
+                .then(response => response.json())
+                .then(data => {
+                    const responseDiv = document.getElementById('response');
+                    responseDiv.innerHTML = `
+                        <p>Window Previous State: ${data.windowPrevState}</p>
+                        <p>Window Current State: ${data.windowCurrState}</p>
+                        <p>Number Fetched: ${data.numbers}</p>
+                        <p>Average: ${data.avg}</p>
+                    `;
+                })
+                .catch(error => console.error('Error fetching number:', error));
+        }
+    </script>
+</body>
+</html>
